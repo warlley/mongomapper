@@ -372,6 +372,18 @@ module MongoMapper
         end
       end
       
+      def all_embedded_documents
+        docs = []
+        associations.each do |name, association|
+          if association.type == :many
+            send(name).each do |doc|
+              docs << doc
+            end
+          end
+        end
+        return docs
+      end
+      
     end
   end # Document
 end # MongoMapper
