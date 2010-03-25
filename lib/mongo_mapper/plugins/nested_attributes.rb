@@ -5,11 +5,11 @@ module MongoMapper
       class TooManyDocuments < MongoMapperError
       end
 
-      def self.included(base)
-        base.extend(ClassMethods)
-        base.class_inheritable_accessor :nested_attributes_options, :instance_writer => false
-        base.nested_attributes_options = {}
-      end
+      #def self.included(base)
+      #  base.extend(ClassMethods)
+      #  base.class_inheritable_accessor :nested_attributes_options, :instance_writer => false
+      #  base.nested_attributes_options = {}
+      #end
 
       module ClassMethods
         REJECT_ALL_BLANK_PROC = proc { |attributes| attributes.all? { |_, value| value.blank? } }
