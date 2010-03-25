@@ -26,10 +26,12 @@ module MongoMapper
         plugin Plugins::Userstamps
         plugin Plugins::Validations
         plugin Plugins::Callbacks # for now callbacks needs to be after validations
-        
+
         plugin Plugins::NestedAttributes
 
         extend Plugins::Validations::DocumentMacros
+        
+        validate :embedded_document_validity
       end
 
       super
@@ -356,6 +358,20 @@ module MongoMapper
         @new = false
         collection.save(to_mongo, :safe => safe)
       end
+      
+      def embedded_document_validity      
+        all_embedded_documents.each do |doc|
+          unless doc.valid?
+            class_name = doc.class.name.humanize
+            doc.errors.errors.each do |attribute, error_messages|
+              error_messages.each do |error|
+                errors.add("#{class_name} #{attribute}", error)
+              end
+            end
+          end
+        end
+      end
+      
     end
   end # Document
 end # MongoMapper
